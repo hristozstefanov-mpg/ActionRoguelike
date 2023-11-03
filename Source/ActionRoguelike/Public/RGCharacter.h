@@ -4,9 +4,6 @@
 #include "GameFramework/Character.h"
 #include "RGCharacter.generated.h"
 
-class UCameraComponent;
-class USpringArmComponent;
-
 UCLASS()
 class ACTIONROGUELIKE_API ARGCharacter : public ACharacter
 {
@@ -16,15 +13,42 @@ public:
 	ARGCharacter();
 
 protected:
-	virtual void BeginPlay() override;
 
+	/** Third person camera attached to this character. */
 	UPROPERTY(VisibleAnywhere)
-	UCameraComponent* CameraComponent;
+	class UCameraComponent* CameraComponent;
 
+	/** Spring arm used for attaching the camera. */
 	UPROPERTY(VisibleAnywhere)
-	USpringArmComponent* SpringArmComponent;
+	class USpringArmComponent* SpringArmComponent;
+
+	/** Input mapping context to use for all default actions. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	class UInputMappingContext* DefaultMappingContext;
+
+	/** Reference to the move action, should be the same as the input action defined in the DefaultMappingContext. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	class UInputAction* MoveAction;
+
+	/** Reference to the look action, should be the same as the input action defined in the DefaultMappingContext. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	class UInputAction* LookAction;
 
 public:
+	/** Initializes the character */
+	virtual void BeginPlay() override;
+
+	/** Updates the character every frame */
 	virtual void Tick(float DeltaTime) override;
+
+protected:
+
+	/** Sets up input bindings mapping actions to specific functions */
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	/** Handles character movement action */
+	virtual void HandleInput_Move(const struct FInputActionValue& Value);
+
+	/** Handles character camera look action */
+	virtual void HandleInput_Look(const struct FInputActionValue& Value);
 };
