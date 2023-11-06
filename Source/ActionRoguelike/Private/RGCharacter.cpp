@@ -1,6 +1,7 @@
 #include "RGCharacter.h"
 
 #include "Camera/CameraComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
@@ -13,9 +14,15 @@ ARGCharacter::ARGCharacter()
 
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComponent"));
 	SpringArmComponent->SetupAttachment(RootComponent);
+	SpringArmComponent->bUsePawnControlRotation = true;
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
 	CameraComponent->SetupAttachment(SpringArmComponent);
+
+	UCharacterMovementComponent* CharacterMovementComponent = GetCharacterMovement();
+	CharacterMovementComponent->bOrientRotationToMovement = true;
+
+	bUseControllerRotationYaw = false;
 }
 
 void ARGCharacter::BeginPlay()
@@ -45,30 +52,29 @@ void ARGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 void ARGCharacter::HandleInput_Move(const FInputActionValue& Value)
 {
-	auto InputAxis2D = Value.Get<FInputActionValue::Axis2D>();
+	auto Movement2D = Value.Get<FInputActionValue::Axis2D>();
 
-	// Convert from input coordinate space (X right, Y up) to character relative coordinates (X forward, Y right)
-	auto RelativeInput3D = FVector(InputAxis2D.Y, InputAxis2D.X, 0.0f);
+	// For the purposes of movement we're only interested in the Yaw component of the rotation
+	FRotator ControlRotation = GetControlRotation();
+	ControlRotation.Pitch = 0.0f;
+	ControlRotation.Roll = 0.0f;
 
-	// Convert from character relative coordinates to world space coordinates (based on character orientation)
-	FQuat ActorRotation = GetActorQuat();
-	FVector WorldSpaceInput3D = ActorRotation * RelativeInput3D;
+	// Get Forward and Right vectors relative to the control rotation
+	FVector ForwardVector = ControlRotation.Vector();
+	FVector RightVector = FRotationMatrix(ControlRotation).GetScaledAxis(EAxis::Y);
 
 	// Add the movement vector to the character
-	AddMovementInput(WorldSpaceInput3D);
+	AddMovementInput(ForwardVector, Movement2D.Y);
+	AddMovementInput(RightVector, Movement2D.X);
 }
 
 void ARGCharacter::HandleInput_Look(const FInputActionValue& Value)
 {
 	auto Look2D = Value.Get<FInputActionValue::Axis2D>();
 
-	// Horizontal look rotates the character
+	// Horizontal look controls the yaw, vertical look - the pitch
 	AddControllerYawInput(Look2D.X);
-
-	// Vertical look rotates only the camera (along the spring arm attached to the character)
-	FRotator CameraPitch = FRotator::ZeroRotator;
-	CameraPitch.Pitch = Look2D.Y;
-	SpringArmComponent->AddLocalRotation(CameraPitch);
+	AddControllerPitchInput(Look2D.Y);
 }
 
 void ARGCharacter::Tick(float DeltaTime)
