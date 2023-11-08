@@ -47,6 +47,7 @@ void ARGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	{
 		EnhancedInput->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ARGCharacter::HandleInput_Move);
 		EnhancedInput->BindAction(LookAction, ETriggerEvent::Triggered, this, &ARGCharacter::HandleInput_Look);
+		EnhancedInput->BindAction(PrimaryAttackAction, ETriggerEvent::Triggered, this, &ARGCharacter::HandleInput_PrimaryAttack);
 	}
 }
 
@@ -75,6 +76,26 @@ void ARGCharacter::HandleInput_Look(const FInputActionValue& Value)
 	// Horizontal look controls the yaw, vertical look - the pitch
 	AddControllerYawInput(Look2D.X);
 	AddControllerPitchInput(Look2D.Y);
+}
+
+void ARGCharacter::HandleInput_PrimaryAttack(const FInputActionValue& Value)
+{
+	FVector SpawnLocation;
+	if (ensureMsgf(ProjectileSpawnSocket.IsValid(), TEXT("Please assign ProjectileSpawnSocket for primary attack projectiles")))
+	{
+		SpawnLocation = GetMesh()->GetSocketLocation(ProjectileSpawnSocket);
+	}
+	else
+	{
+		SpawnLocation = GetActorLocation();
+	}
+
+	FTransform SpawnTransform = FTransform(GetControlRotation(), SpawnLocation);
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransform, SpawnParams);
 }
 
 void ARGCharacter::Tick(float DeltaTime)
