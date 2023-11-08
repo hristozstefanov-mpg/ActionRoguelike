@@ -46,6 +46,7 @@ void ARGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	if (auto* EnhancedInput = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		EnhancedInput->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ARGCharacter::HandleInput_Move);
+		EnhancedInput->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ARGCharacter::HandleInput_Jump);
 		EnhancedInput->BindAction(LookAction, ETriggerEvent::Triggered, this, &ARGCharacter::HandleInput_Look);
 		EnhancedInput->BindAction(PrimaryAttackAction, ETriggerEvent::Triggered, this, &ARGCharacter::HandleInput_PrimaryAttack);
 	}
@@ -67,6 +68,11 @@ void ARGCharacter::HandleInput_Move(const FInputActionValue& Value)
 	// Add the movement vector to the character
 	AddMovementInput(ForwardVector, Movement2D.Y);
 	AddMovementInput(RightVector, Movement2D.X);
+}
+
+void ARGCharacter::HandleInput_Jump(const FInputActionValue& Value)
+{
+	Jump();
 }
 
 void ARGCharacter::HandleInput_Look(const FInputActionValue& Value)

@@ -30,6 +30,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	class UInputAction* MoveAction;
 
+	/** Reference to the jump action, should be the same as the input action defined in the DefaultMappingContext. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	class UInputAction* JumpAction;
+
 	/** Reference to the look action, should be the same as the input action defined in the DefaultMappingContext. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	class UInputAction* LookAction;
@@ -60,6 +64,9 @@ protected:
 
 	/** Handles character movement action */
 	virtual void HandleInput_Move(const struct FInputActionValue& Value);
+
+	/** Handles character jump action */
+	virtual void HandleInput_Jump(const FInputActionValue& Value);
 
 	/** Handles character camera look action */
 	virtual void HandleInput_Look(const struct FInputActionValue& Value);
