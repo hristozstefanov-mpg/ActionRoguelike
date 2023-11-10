@@ -4,7 +4,7 @@
 #include "RGMagicProjectile.generated.h"
 
 UCLASS()
-class ARGMagicProjectile : public AActor
+class ACTIONROGUELIKE_API ARGMagicProjectile : public AActor
 {
 	GENERATED_BODY()
 

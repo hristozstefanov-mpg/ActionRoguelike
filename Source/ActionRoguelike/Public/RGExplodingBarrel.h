@@ -4,7 +4,7 @@
 #include "RGExplodingBarrel.generated.h"
 
 UCLASS()
-class ARGExplodingBarrel : public AActor
+class ACTIONROGUELIKE_API ARGExplodingBarrel : public AActor
 {
 	GENERATED_BODY()
 

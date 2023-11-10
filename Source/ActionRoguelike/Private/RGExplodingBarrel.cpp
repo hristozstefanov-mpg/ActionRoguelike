@@ -6,7 +6,7 @@
 
 ARGExplodingBarrel::ARGExplodingBarrel()
 {
-	PrimaryActorTick.bCanEverTick = true;	
+	PrimaryActorTick.bCanEverTick = true;
 
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
 	StaticMeshComponent->SetCollisionProfileName("PhysicsActor");
