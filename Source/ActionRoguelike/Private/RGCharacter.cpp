@@ -7,6 +7,7 @@
 #include "EnhancedInputComponent.h"
 #include "InputMappingContext.h"
 #include "InputActionValue.h"
+#include "RGInteractionComponent.h"
 
 ARGCharacter::ARGCharacter()
 {
@@ -18,6 +19,8 @@ ARGCharacter::ARGCharacter()
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
 	CameraComponent->SetupAttachment(SpringArmComponent);
+
+	InteractionComponent = CreateDefaultSubobject<URGInteractionComponent>(TEXT("InteractionComponent"));
 
 	UCharacterMovementComponent* CharacterMovementComponent = GetCharacterMovement();
 	CharacterMovementComponent->bOrientRotationToMovement = true;
@@ -49,6 +52,7 @@ void ARGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		EnhancedInput->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ARGCharacter::HandleInput_Jump);
 		EnhancedInput->BindAction(LookAction, ETriggerEvent::Triggered, this, &ARGCharacter::HandleInput_Look);
 		EnhancedInput->BindAction(PrimaryAttackAction, ETriggerEvent::Triggered, this, &ARGCharacter::HandleInput_PrimaryAttack);
+		EnhancedInput->BindAction(PrimaryInteractAction, ETriggerEvent::Triggered, this, &ARGCharacter::HandleInput_PrimaryInteract);
 	}
 }
 
@@ -102,6 +106,11 @@ void ARGCharacter::HandleInput_PrimaryAttack(const FInputActionValue& Value)
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransform, SpawnParams);
+}
+
+void ARGCharacter::HandleInput_PrimaryInteract(const struct FInputActionValue& Value)
+{
+	InteractionComponent->PrimaryInteract();
 }
 
 void ARGCharacter::Tick(float DeltaTime)

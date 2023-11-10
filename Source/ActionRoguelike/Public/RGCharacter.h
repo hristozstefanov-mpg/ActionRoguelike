@@ -22,6 +22,10 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	class USpringArmComponent* SpringArmComponent;
 
+	/** Interaction handling behavior. */
+	UPROPERTY(VisibleAnywhere)
+	class URGInteractionComponent* InteractionComponent;
+
 	/** Input mapping context to use for all default actions. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	class UInputMappingContext* DefaultMappingContext;
@@ -41,6 +45,10 @@ protected:
 	/** Reference to the primary attack action, should be the same as the input action defined in the DefaultMappingContext. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	class UInputAction* PrimaryAttackAction;
+
+	/** Reference to the primary interaction action, should be the same as the input action defined in the DefaultMappingContext. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	class UInputAction* PrimaryInteractAction;
 
 	/** Projectile class to spawn when using primary attack. */
 	UPROPERTY(EditAnywhere)
@@ -73,4 +81,7 @@ protected:
 
 	/** Handles character main attack action */
 	virtual void HandleInput_PrimaryAttack(const struct FInputActionValue& Value);
+
+	/** Handles character main interact action */
+	virtual void HandleInput_PrimaryInteract(const struct FInputActionValue& Value);
 };
