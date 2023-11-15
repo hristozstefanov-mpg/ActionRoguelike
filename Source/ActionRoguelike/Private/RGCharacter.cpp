@@ -90,6 +90,13 @@ void ARGCharacter::HandleInput_Look(const FInputActionValue& Value)
 
 void ARGCharacter::HandleInput_PrimaryAttack(const FInputActionValue& Value)
 {
+	PlayAnimMontage(AttackAnimation);
+
+	GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this, &ARGCharacter::PrimaryAttack_TimeElapsed, 0.2f);
+}
+
+void ARGCharacter::PrimaryAttack_TimeElapsed()
+{
 	FVector SpawnLocation;
 	if (ensureMsgf(ProjectileSpawnSocket.IsValid(), TEXT("Please assign ProjectileSpawnSocket for primary attack projectiles")))
 	{

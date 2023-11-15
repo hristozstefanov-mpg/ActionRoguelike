@@ -51,12 +51,16 @@ protected:
 	class UInputAction* PrimaryInteractAction;
 
 	/** Projectile class to spawn when using primary attack. */
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Attack")
 	TSubclassOf<AActor> ProjectileClass;
 
 	/** The character mesh socket to use as spawn point for projectiles. */
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Attack")
 	FName ProjectileSpawnSocket;
+
+	/** Attack animation for the character. */
+	UPROPERTY(EditAnywhere, Category = "Attack")
+	UAnimMontage* AttackAnimation;
 
 public:
 	/** Initializes the character */
@@ -84,4 +88,11 @@ protected:
 
 	/** Handles character main interact action */
 	virtual void HandleInput_PrimaryInteract(const struct FInputActionValue& Value);
+
+	/** Callback for when the attack time reaches */
+	virtual void PrimaryAttack_TimeElapsed();
+
+protected:
+
+	FTimerHandle TimerHandle_PrimaryAttack;
 };
