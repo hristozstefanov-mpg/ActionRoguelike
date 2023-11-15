@@ -11,15 +11,15 @@ class ACTIONROGUELIKE_API ARGMagicProjectile : public AActor
 protected:
 
 	/** Sphere component used for collision. */
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class USphereComponent* SphereComponent;
 
 	/** Movement component for the trajectory of the magic projectile. */
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UProjectileMovementComponent* MovementComponent;
 
 	/** Effects particle system. */
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UParticleSystemComponent* EffectComponent;
 
 public:
