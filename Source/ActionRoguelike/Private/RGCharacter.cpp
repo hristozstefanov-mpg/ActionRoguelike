@@ -41,6 +41,7 @@ void ARGCharacter::BeginPlay()
 		}
 	}
 }
+
 void ARGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -107,7 +108,19 @@ void ARGCharacter::PrimaryAttack_TimeElapsed()
 		SpawnLocation = GetActorLocation();
 	}
 
-	FTransform SpawnTransform = FTransform(GetControlRotation(), SpawnLocation);
+	FRotator SpawnRotation = GetControlRotation();
+
+	FVector TraceStartLocation = CameraComponent->GetComponentLocation();
+	FVector TraceEndLocation = TraceStartLocation + CameraComponent->GetComponentTransform().GetRotation().Vector() * 10000.0f;
+
+	FHitResult HitResult;
+	if (GetWorld()->LineTraceSingleByChannel(HitResult, TraceStartLocation, TraceEndLocation, ECollisionChannel::ECC_Visibility))
+	{
+		FVector DirectionVector = HitResult.ImpactPoint - SpawnLocation;
+		SpawnRotation = FRotationMatrix::MakeFromX(DirectionVector).Rotator();
+	}
+
+	FTransform SpawnTransform = FTransform(SpawnRotation, SpawnLocation);
 
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
