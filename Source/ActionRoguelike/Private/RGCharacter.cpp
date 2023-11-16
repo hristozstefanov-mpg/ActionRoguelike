@@ -53,6 +53,8 @@ void ARGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		EnhancedInput->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ARGCharacter::HandleInput_Jump);
 		EnhancedInput->BindAction(LookAction, ETriggerEvent::Triggered, this, &ARGCharacter::HandleInput_Look);
 		EnhancedInput->BindAction(PrimaryAttackAction, ETriggerEvent::Triggered, this, &ARGCharacter::HandleInput_PrimaryAttack);
+		EnhancedInput->BindAction(SecondaryAttackAction, ETriggerEvent::Triggered, this, &ARGCharacter::HandleInput_SecondaryAttack);
+		EnhancedInput->BindAction(TrietaryAttackAction, ETriggerEvent::Triggered, this, &ARGCharacter::HandleInput_TrietaryAttack);
 		EnhancedInput->BindAction(PrimaryInteractAction, ETriggerEvent::Triggered, this, &ARGCharacter::HandleInput_PrimaryInteract);
 	}
 }
@@ -93,10 +95,39 @@ void ARGCharacter::HandleInput_PrimaryAttack(const FInputActionValue& Value)
 {
 	PlayAnimMontage(AttackAnimation);
 
-	GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this, &ARGCharacter::PrimaryAttack_TimeElapsed, 0.2f);
+	GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this, &ARGCharacter::TimeElapsed_PrimaryAttack, 0.2f);
 }
 
-void ARGCharacter::PrimaryAttack_TimeElapsed()
+void ARGCharacter::TimeElapsed_PrimaryAttack()
+{
+	SpawnProjectile(PrimaryProjectileClass);
+}
+
+void ARGCharacter::HandleInput_SecondaryAttack(const FInputActionValue& Value)
+{
+	PlayAnimMontage(AttackAnimation);
+
+	GetWorldTimerManager().SetTimer(TimerHandle_SecondaryAttack, this, &ARGCharacter::TimeElapsed_SecondaryAttack, 0.2f);
+}
+
+void ARGCharacter::TimeElapsed_SecondaryAttack()
+{
+	SpawnProjectile(SecondaryProjectileClass);
+}
+
+void ARGCharacter::HandleInput_TrietaryAttack(const FInputActionValue& Value)
+{
+	PlayAnimMontage(AttackAnimation);
+
+	GetWorldTimerManager().SetTimer(TimerHandle_TrietaryAttack, this, &ARGCharacter::TimeElapsed_TrietaryAttack, 0.2f);
+}
+
+void ARGCharacter::TimeElapsed_TrietaryAttack()
+{
+	SpawnProjectile(TrietaryProjectileClass);
+}
+
+void ARGCharacter::SpawnProjectile(TSubclassOf<AActor> ProjectileClass)
 {
 	FVector SpawnLocation;
 	if (ensureMsgf(ProjectileSpawnSocket.IsValid(), TEXT("Please assign ProjectileSpawnSocket for primary attack projectiles")))

@@ -46,13 +46,29 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	class UInputAction* PrimaryAttackAction;
 
+	/** Reference to the secondary attack action, should be the same as the input action defined in the DefaultMappingContext. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	class UInputAction* SecondaryAttackAction;
+
+	/** Reference to the trietary attack action, should be the same as the input action defined in the DefaultMappingContext. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	class UInputAction* TrietaryAttackAction;
+
 	/** Reference to the primary interaction action, should be the same as the input action defined in the DefaultMappingContext. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	class UInputAction* PrimaryInteractAction;
 
 	/** Projectile class to spawn when using primary attack. */
 	UPROPERTY(EditAnywhere, Category = "Attack")
-	TSubclassOf<AActor> ProjectileClass;
+	TSubclassOf<AActor> PrimaryProjectileClass;
+
+	/** Projectile class to spawn when using secondary attack. */
+	UPROPERTY(EditAnywhere, Category = "Attack")
+	TSubclassOf<AActor> SecondaryProjectileClass;
+
+	/** Projectile class to spawn when using secondary attack. */
+	UPROPERTY(EditAnywhere, Category = "Attack")
+	TSubclassOf<AActor> TrietaryProjectileClass;
 
 	/** The character mesh socket to use as spawn point for projectiles. */
 	UPROPERTY(EditAnywhere, Category = "Attack")
@@ -86,13 +102,30 @@ protected:
 	/** Handles character main attack action */
 	virtual void HandleInput_PrimaryAttack(const struct FInputActionValue& Value);
 
+	/** Handles character secondary attack action */
+	virtual void HandleInput_SecondaryAttack(const struct FInputActionValue& Value);
+
+	/** Handles character main trietary action */
+	virtual void HandleInput_TrietaryAttack(const struct FInputActionValue& Value);
+
 	/** Handles character main interact action */
 	virtual void HandleInput_PrimaryInteract(const struct FInputActionValue& Value);
 
-	/** Callback for when the attack time reaches */
-	virtual void PrimaryAttack_TimeElapsed();
+	/** Callback for when the primary attack time reaches */
+	virtual void TimeElapsed_PrimaryAttack();
+
+	/** Callback for when the secondary attack time reaches */
+	virtual void TimeElapsed_SecondaryAttack();
+
+	/** Callback for when the trietary attack time reaches */
+	virtual void TimeElapsed_TrietaryAttack();
+
+	/** Spawns a projectile of the specified type */
+	void SpawnProjectile(TSubclassOf<AActor> ProjectileClass);
 
 protected:
 
 	FTimerHandle TimerHandle_PrimaryAttack;
+	FTimerHandle TimerHandle_SecondaryAttack;
+	FTimerHandle TimerHandle_TrietaryAttack;
 };
