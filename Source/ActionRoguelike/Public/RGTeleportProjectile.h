@@ -11,8 +11,8 @@ class ACTIONROGUELIKE_API ARGTeleportProjectile : public ARGBaseProjectile
 
 protected:
 
-	/** Static mesh of the barrel. */
-	UPROPERTY(EditAnywhere)
+	/** Teleportation particle explosion. */
+	UPROPERTY(EditAnywhere, Category = Particles)
 	class UParticleSystem* ExplosionParticles;
 
 	/** Duration of the projectile flight. */

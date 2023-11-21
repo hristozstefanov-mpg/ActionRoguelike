@@ -12,11 +12,11 @@ class ACTIONROGUELIKE_API ARGItemChest : public AActor, public IRGGameplayInterf
 protected:
 
 	/** Static mesh of the chest base. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class UStaticMeshComponent*	BaseMesh;
 
 	/** Static mesh of the chest lid. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class UStaticMeshComponent* LidMesh;
 
 	/** The rotation pitch of the lid when it is open. */

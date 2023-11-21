@@ -11,15 +11,15 @@ class ACTIONROGUELIKE_API ARGExplodingBarrel : public AActor
 protected:
 
 	/** Static mesh of the barrel. */
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UStaticMeshComponent* StaticMeshComponent;
 
 	/** Radial force of the explosion. */
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class URadialForceComponent* RadialForceComponent;
 
 	/** Explosion effect. */
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UParticleSystemComponent* EffectComponent;
 
 public:

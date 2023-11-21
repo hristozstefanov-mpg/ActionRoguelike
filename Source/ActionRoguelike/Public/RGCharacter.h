@@ -15,15 +15,15 @@ public:
 protected:
 
 	/** Third person camera attached to this character. */
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UCameraComponent* CameraComponent;
 
 	/** Spring arm used for attaching the camera. */
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class USpringArmComponent* SpringArmComponent;
 
 	/** Interaction handling behavior. */
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class URGInteractionComponent* InteractionComponent;
 
 	/** Input mapping context to use for all default actions. */
