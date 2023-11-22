@@ -1,6 +1,7 @@
 #include "RGInteractionComponent.h"
 #include "RGGameplayInterface.h"
 
+
 URGInteractionComponent::URGInteractionComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;

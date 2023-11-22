@@ -1,5 +1,8 @@
 #include "RGCharacter.h"
 
+#include "RGAttributesComponent.h"
+#include "RGInteractionComponent.h"
+
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -7,7 +10,6 @@
 #include "EnhancedInputComponent.h"
 #include "InputMappingContext.h"
 #include "InputActionValue.h"
-#include "RGInteractionComponent.h"
 
 ARGCharacter::ARGCharacter()
 {
@@ -19,6 +21,8 @@ ARGCharacter::ARGCharacter()
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
 	CameraComponent->SetupAttachment(SpringArmComponent);
+
+	AttributesComponent = CreateDefaultSubobject<URGAttributesComponent>(TEXT("AttributesComponent"));
 
 	InteractionComponent = CreateDefaultSubobject<URGInteractionComponent>(TEXT("InteractionComponent"));
 

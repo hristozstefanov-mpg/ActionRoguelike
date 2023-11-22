@@ -22,6 +22,10 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class USpringArmComponent* SpringArmComponent;
 
+	/** Component holding and managing attributes. */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	class URGAttributesComponent* AttributesComponent;
+
 	/** Interaction handling behavior. */
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class URGInteractionComponent* InteractionComponent;
