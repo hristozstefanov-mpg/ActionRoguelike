@@ -2,6 +2,7 @@
 
 #include "Components/SphereComponent.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 
 ARGTeleportProjectile::ARGTeleportProjectile()
 {
@@ -11,35 +12,29 @@ void ARGTeleportProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 
-	check(SphereComponent);
-	SphereComponent->OnComponentHit.AddDynamic(this, &ARGTeleportProjectile::OnHitCallback);
-
-	GetWorldTimerManager().SetTimer(TimerHandle_Explosion, this, &ARGTeleportProjectile::TimeElapsed_Explosion, ProjectileLifetime);
+	GetWorldTimerManager().SetTimer(TimerHandle_Explosion, this, &ARGTeleportProjectile::TimeElapsed_Explode, ProjectileLifetime);
 }
 
-void ARGTeleportProjectile::OnHitCallback(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
+void ARGTeleportProjectile::TimeElapsed_Explode()
 {
-	Teleport();
+	Explode(nullptr);
 }
 
-void ARGTeleportProjectile::Teleport()
-{
-	APawn* InstigatorPawn = GetInstigator();
-	if (ensure(InstigatorPawn))
-	{
-		InstigatorPawn->TeleportTo(GetActorLocation(), GetActorRotation());
-	}
-	Destroy();
-}
-
-void ARGTeleportProjectile::TimeElapsed_Explosion()
+void ARGTeleportProjectile::Explode_Implementation(AActor* HitActor)
 {
 	SphereComponent->SetPhysicsLinearVelocity(FVector::Zero());
+	MovementComponent->StopMovementImmediately();
 	EffectComponent->SetTemplate(ExplosionParticles);
 	GetWorldTimerManager().SetTimer(TimerHandle_Explosion, this, &ARGTeleportProjectile::TimeElapsed_Teleport, TeleportAnimDuration);
 }
 
 void ARGTeleportProjectile::TimeElapsed_Teleport()
 {
-	Teleport();
+	APawn* InstigatorPawn = GetInstigator();
+	if (ensure(InstigatorPawn))
+	{
+		InstigatorPawn->TeleportTo(GetActorLocation(), GetActorRotation());
+	}
+
+	Destroy();
 }

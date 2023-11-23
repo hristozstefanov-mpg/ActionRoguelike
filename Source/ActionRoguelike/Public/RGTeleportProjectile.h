@@ -30,13 +30,11 @@ public:
 protected:
 
 	virtual void BeginPlay() override;
-	void Teleport();
 
-	void TimeElapsed_Explosion();
+	void TimeElapsed_Explode();
 	void TimeElapsed_Teleport();
 
-	UFUNCTION()
-	void OnHitCallback(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+	virtual void Explode_Implementation(AActor* HitActor) override;
 
 protected:
 
